@@ -1,0 +1,184 @@
+/* ============================================================
+   Visual style modeled after the OSI 90th Anniversary site:
+   soft blurred pastel gradient blobs behind a clean, minimal,
+   light layout - muted slate typography, glassy translucent
+   panels, fully-rounded "pill" buttons, generous whitespace.
+   ============================================================ */
+
+:root {
+  --ink: #46536b;        /* muted slate-blue - main text color */
+  --ink-soft: #7c879a;   /* secondary/label text */
+  --glass: rgba(255, 255, 255, 0.6);
+  --glass-border: rgba(255, 255, 255, 0.8);
+  --accent: #6c6bf5;     /* soft indigo - selected/active state */
+  --accent-record: #ff8fa3; /* soft coral-pink - recording state */
+  --accent-play: #7bd8c0;   /* soft mint - playing state */
+}
+
+body {
+  font-family: "Manrope", -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+  color: var(--ink);
+  margin: 0;
+  padding: 28px 24px 60px;
+
+  /* Soft pastel blobs, concentrated toward the bottom of the page and
+     fading to a warm off-white higher up - the same "gradient mesh"
+     feel as the reference site. background-attachment keeps it fixed
+     as you scroll instead of stretching per-section. */
+  background-color: #f5f2ee;
+  background-image:
+    radial-gradient(circle at 12% 92%, rgba(255, 150, 170, 0.45), transparent 42%),
+    radial-gradient(circle at 88% 96%, rgba(255, 178, 120, 0.4), transparent 42%),
+    radial-gradient(circle at 45% 100%, rgba(255, 200, 220, 0.35), transparent 50%),
+    radial-gradient(circle at 15% 30%, rgba(150, 200, 255, 0.3), transparent 45%),
+    radial-gradient(circle at 92% 15%, rgba(180, 220, 255, 0.28), transparent 40%);
+  background-attachment: fixed;
+  min-height: 100vh;
+}
+
+h1 {
+  margin-bottom: 4px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+}
+.sub { margin: 8px 0 0; color: var(--ink-soft); font-size: 14px; max-width: 720px; line-height: 1.5; }
+
+/* Collapsible "How to use this" instructions - collapsed by default so the
+   toolbar isn't pushed down by a wall of text; click the summary to expand. */
+.instructions { margin-bottom: 10px; }
+.instructions summary {
+  display: inline-block;
+  cursor: pointer;
+  list-style: none;
+  color: var(--ink-soft);
+  font-size: 13px;
+  font-weight: 600;
+  background: var(--glass);
+  border: 1px solid var(--glass-border);
+  border-radius: 999px;
+  padding: 6px 14px;
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  transition: background 0.15s ease, color 0.15s ease;
+}
+.instructions summary::-webkit-details-marker { display: none; }
+.instructions summary:hover { background: #fff; color: var(--ink); }
+.instructions[open] summary { border-bottom-left-radius: 6px; border-bottom-right-radius: 6px; }
+
+/* Shared "glass panel" look for the toolbars and the canvas frame */
+#status-bar,
+#controls,
+#sketch-holder {
+  background: var(--glass);
+  border: 1px solid var(--glass-border);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  box-shadow: 0 8px 30px rgba(70, 83, 107, 0.08);
+}
+
+#status-bar {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  border-radius: 999px;
+  padding: 10px 18px;
+  margin-bottom: 14px;
+  flex-wrap: wrap;
+}
+
+#forceMeterOuter {
+  width: 140px;
+  height: 10px;
+  background: rgba(70, 83, 107, 0.12);
+  border-radius: 999px;
+  overflow: hidden;
+}
+#forceMeterInner {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, #8ec5ff, #ff9fb3);
+  border-radius: 999px;
+}
+#connectionStatus, #forceReading { color: var(--ink-soft); font-size: 13px; }
+
+#controls {
+  display: flex;
+  gap: 28px;
+  flex-wrap: wrap;
+  border-radius: 20px;
+  padding: 16px 20px;
+  margin-bottom: 14px;
+}
+
+.group { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+.label { color: var(--ink-soft); font-size: 12px; text-transform: uppercase; letter-spacing: 0.04em; margin-right: 4px; }
+.meta { color: var(--ink-soft); font-size: 12px; }
+
+input[type="number"] {
+  font-family: inherit;
+  background: rgba(255, 255, 255, 0.7);
+  color: var(--ink);
+  border: 1px solid rgba(70, 83, 107, 0.15);
+  border-radius: 999px;
+  padding: 7px 10px;
+  width: 60px;
+  font-size: 13px;
+  font-weight: 600;
+  text-align: center;
+}
+input[type="number"]:focus { outline: none; border-color: var(--accent); background: #fff; }
+
+button {
+  font-family: inherit;
+  background: rgba(255, 255, 255, 0.7);
+  color: var(--ink);
+  border: 1px solid rgba(70, 83, 107, 0.15);
+  border-radius: 999px;
+  padding: 9px 16px;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 600;
+  transition: transform 0.15s ease, background 0.15s ease, box-shadow 0.15s ease;
+}
+button:hover { background: #fff; transform: translateY(-1px); box-shadow: 0 4px 14px rgba(70, 83, 107, 0.12); }
+button:active { transform: translateY(0); }
+button:disabled { opacity: 0.4; cursor: not-allowed; }
+button:disabled:hover { background: rgba(255, 255, 255, 0.7); transform: none; box-shadow: none; }
+
+button.active { background: var(--accent); color: #fff; border-color: var(--accent); }
+button.recording { background: var(--accent-record); color: #fff; border-color: var(--accent-record); }
+button.playing { background: var(--accent-play); color: #16403a; border-color: var(--accent-play); }
+
+/* Pitch buttons show two lines (key number, note name) */
+.pitchBtn {
+  min-width: 42px;
+  line-height: 1.2;
+  text-align: center;
+  padding: 7px 10px;
+}
+
+#sketch-holder {
+  border-radius: 20px;
+  overflow: hidden;
+  margin-bottom: 14px;
+  padding: 4px;
+}
+
+#trackList {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.trackRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--glass);
+  border: 1px solid var(--glass-border);
+  border-radius: 999px;
+  padding: 8px 16px;
+  font-size: 13px;
+  color: var(--ink);
+}
+.trackRow button { padding: 5px 12px; font-size: 12px; }

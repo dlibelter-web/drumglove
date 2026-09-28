@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>FSR Drum Glove Looper</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="style.css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.0/p5.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.0/addons/p5.sound.min.js"></script>
+</head>
+<body>
+  <h1>FSR Drum Glove Looper</h1>
+  <details class="instructions">
+    <summary>How to use this ▸</summary>
+    <p class="sub">Press the glove sensor to play a note - press harder to bend the pitch up (a smooth glide, never down). Record a first pass to set the loop length, then overdub more layers on top. Click a note to select it (shift-click or drag a box for more), drag to move the whole selection or grab an edge to stretch it, Delete/Backspace to remove it. Ctrl/Cmd+C/X/V copy, cut, paste at the position bar - drag its little flag or click empty space to move the bar. "Split" (button or S) turns clicks into cuts. Quantize snaps every note to the nearest beat, Undo/Redo cover everything above. Save/Save As downloads your loop as a file; Open loads one back in. Note lines are colored by pitch - red near C, blending through purple up to blue near B - not by instrument.</p>
+  </details>
+
+  <div id="status-bar">
+    <button id="connectBtn">Connect Arduino</button>
+    <span id="connectionStatus">Not connected</span>
+    <div id="forceMeterOuter"><div id="forceMeterInner"></div></div>
+    <span id="forceReading">force: --</span>
+  </div>
+
+  <div id="controls">
+    <div class="group">
+      <span class="label">File</span>
+      <button id="saveBtn">💾 Save</button>
+      <button id="saveAsBtn">Save As</button>
+      <button id="openBtn">📂 Open</button>
+      <input type="file" id="openFileInput" accept=".json,application/json" style="display:none" />
+      <span class="meta" id="currentFileLabel">Untitled loop</span>
+    </div>
+    <div class="group">
+      <span class="label">Instrument</span>
+      <button class="instBtn" data-inst="pluck">Pluck (Z)</button>
+      <button class="instBtn" data-inst="pad">Pad (X)</button>
+      <button class="instBtn" data-inst="bass">Bass (C)</button>
+    </div>
+    <div class="group">
+      <span class="label">Pitch</span>
+      <div id="pitchButtons"></div>
+    </div>
+    <div class="group">
+      <span class="label">Tempo</span>
+      <input type="number" id="bpmInput" value="120" min="20" max="300" step="1" />
+      <span class="meta">BPM · 4/4</span>
+    </div>
+    <div class="group">
+      <span class="label">Latency comp</span>
+      <input type="number" id="latencyInput" value="0" min="-300" max="300" step="5" />
+      <span class="meta">ms</span>
+    </div>
+    <div class="group">
+      <button id="recordBtn">● Record</button>
+      <button id="playBtn">▶ Play</button>
+      <button id="quantizeBtn">⌗ Quantize</button>
+      <button id="splitBtn">✂ Split (S)</button>
+      <button id="clearAllBtn">Clear All</button>
+    </div>
+    <div class="group">
+      <button id="undoBtn" disabled>↶ Undo</button>
+      <button id="redoBtn" disabled>↷ Redo</button>
+    </div>
+  </div>
+
+  <div id="sketch-holder"></div>
+
+  <div id="trackList"></div>
+
+  <script src="sketch.js"></script>
+</body>
+</html>
